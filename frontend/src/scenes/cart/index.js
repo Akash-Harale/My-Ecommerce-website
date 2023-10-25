@@ -11,9 +11,10 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import React, {  useState } from "react";
+
 import toast, { Toaster } from "react-hot-toast";
-import { cartt } from "scenes/homePage";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteCartItem } from "state/slices/authSlice";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -25,14 +26,14 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export const Cart = () => {
   const theme = useTheme();
-  const [cartItems] = useState(cartt);
-  console.log(cartItems);
+  const cartItems = useSelector((store) => store.cartItems);
+  const dispatch = useDispatch();
 
-  const handleRemove=()=>{
-    toast('This functionality is under development and \n will be completed at the end of 25 October 2023',{
-      icon: '⚒️'
-    })
-  }
+  const handleRemove = (index) => {
+    console.log(index)
+    dispatch(deleteCartItem(index));
+    toast.success("Item removed from cart");
+  };
   return (
     <Box>
       <Box
@@ -50,15 +51,18 @@ export const Cart = () => {
           fontWeight="bold"
           fontSize="20px"
           color="primary"
-         
         >
-         {cartItems.length===0? <span style={{color:"red"}}>Cart is Empty</span> : 'This is your Cart'}
+          {cartItems.length === 0 ? (
+            <span style={{ color: "red" }}>Cart is Empty</span>
+          ) : (
+            "This is your Cart"
+          )}
         </Typography>
       </Box>
 
       <Box sx={{ flexGrow: 1, margin: "0px 30px" }}>
         <Grid container spacing={2}>
-          {cartt.map((el, index) => {
+          {cartItems.map((el, index) => {
             return (
               <Grid key={index} item xs={12} sm={6} md={4} lg={3}>
                 <Item>
@@ -78,8 +82,12 @@ export const Cart = () => {
                       </Typography>
                     </CardContent>
                     <CardActions>
-                      <Toaster/>
-                      <Button onClick={handleRemove} color="error" size="small">
+                      <Toaster />
+                      <Button
+                        onClick={() => handleRemove(index)}
+                        color="error"
+                        size="small"
+                      >
                         Remove
                       </Button>
                     </CardActions>

@@ -7,13 +7,15 @@ import {
   CardMedia,
   Typography,
 } from "@mui/material";
-import {  useSelector } from "react-redux";
+import {  useDispatch, useSelector } from "react-redux";
 import * as React from "react";
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import toast, { Toaster } from 'react-hot-toast';
 import { useTheme } from "@emotion/react";
+import { addToCart } from "state/slices/authSlice";
+
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -24,15 +26,14 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-export const cartt = [];
 
 const HomePage = () => {
   const theme= useTheme()
   const products = useSelector((store) => store.products);
   const user= useSelector((store) => store.user);
-
-  const hadleAddToCart = (index) => {
-    cartt.push(products[index]);
+const dispatch= useDispatch(); 
+  const hadleAddToCart = (payload) => {
+     dispatch(addToCart(payload))
   };
 
   const handleDetailsBtn=()=>{
@@ -71,7 +72,7 @@ const HomePage = () => {
                       <Button
                         onClick={() => {
                           if(user){
-                            hadleAddToCart(index)
+                            hadleAddToCart(el)
                             toast.success('successfull added to cart')
                           } else{
                             toast("Please Login to add to cart", {icon:'⚠️'})

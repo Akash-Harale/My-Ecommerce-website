@@ -33,11 +33,13 @@ const authSlice = createSlice({
       state.posts = updatedPosts;
     },
     setRegisteredUsers: (state, action) => {
-      // state.registeredUsers = action.payload;
       state.registeredUsers = [...state.registeredUsers, action.payload];
     },
     addToCart: (state, action) => {
-      state.cartItems = action.payload;
+      state.cartItems = [...state.cartItems, action.payload];
+    },
+    deleteCartItem: (state, action) => {
+      state.cartItems.splice(action.payload, 1);
     },
   },
 });
@@ -51,5 +53,6 @@ export const {
   setPost,
   setRegisteredUsers,
   addToCart,
+  deleteCartItem,
 } = authSlice.actions;
 export default authSlice;
